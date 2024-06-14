@@ -15,7 +15,7 @@ public class PersonagemBase {
     private String habilidade1;
     private String habilidade2;
     private String habilidade3;
-    private double vida;
+    private double vida = 100;
     private Map<String, Double> danoDeCadaHabilidade = new HashMap<>();
 
     // Construtor que inicializa danoDeCadaHabilidade com valores padrão

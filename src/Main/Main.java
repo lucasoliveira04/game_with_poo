@@ -41,7 +41,7 @@ public class Main {
             System.out.println("0 - Sair");
 
             int escolhaHabilidade = scanner.nextInt();
-            scanner.nextLine(); // consumir a linha pendente
+            scanner.nextLine();
 
             switch (escolhaHabilidade) {
                 case 1:
