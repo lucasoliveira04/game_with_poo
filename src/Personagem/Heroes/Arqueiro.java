@@ -4,6 +4,6 @@ import Personagem.PersonagemBase;
 
 public class Arqueiro  extends PersonagemBase{
     public Arqueiro(){
-        super("arqueiro", "flexa", "soco", "chute");
+        super("arqueiro", "flexa", "soco", "chute", "flexa_tripla");
     }
 }
