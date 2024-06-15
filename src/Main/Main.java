@@ -2,6 +2,7 @@ package Main;
 
 import ConfigurationActions.Attack.Attack;
 import Personagem.Heroes.Arqueiro;
+import Personagem.Heroes.Bruxa;
 import Personagem.PersonagemBase;
 
 import java.util.Scanner;
@@ -27,37 +28,45 @@ public class Main {
 
     private static void escolherHabilidade(PersonagemBase personagemBase, Attack attack) {
         while (true) {
-            exibirQuadroHabilidades(personagemBase, attack);
+            if (!attack.isEspecialEmExecucao()) {
+                exibirQuadroHabilidades(personagemBase, attack);
 
-            int escolhaHabilidade = scanner.nextInt();
-            scanner.nextLine();
+                int escolhaHabilidade = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (escolhaHabilidade) {
-                case 1:
-                    attack.action(personagemBase.getHabilidade1());
-                    personagemBase.incrementarDanoCausado(personagemBase.getHabilidade1());
-                    break;
-                case 2:
-                    attack.action(personagemBase.getHabilidade2());
-                    personagemBase.incrementarDanoCausado(personagemBase.getHabilidade2());
-                    break;
-                case 3:
-                    attack.action(personagemBase.getHabilidade3());
-                    personagemBase.incrementarDanoCausado(personagemBase.getHabilidade3());
-                    break;
-                case 4:
-                    if (attack.isEspecialDesbloqueado()) {
-                        attack.action(personagemBase.getHabilidadeSpecial());
-                        personagemBase.incrementarDanoCausado(personagemBase.getHabilidadeSpecial());
-                    } else {
-                        System.out.println("Ataque especial ainda não desbloqueado.");
-                    }
-                    break;
-                case 0:
-                    System.out.println("Saindo...");
-                    return;
-                default:
-                    System.out.println("Habilidade inválida");
+                switch (escolhaHabilidade) {
+                    case 1:
+                        attack.action(personagemBase.getHabilidade1());
+                        personagemBase.incrementarDanoCausado(personagemBase.getHabilidade1());
+                        break;
+                    case 2:
+                        attack.action(personagemBase.getHabilidade2());
+                        personagemBase.incrementarDanoCausado(personagemBase.getHabilidade2());
+                        break;
+                    case 3:
+                        attack.action(personagemBase.getHabilidade3());
+                        personagemBase.incrementarDanoCausado(personagemBase.getHabilidade3());
+                        break;
+                    case 4:
+                        if (attack.isEspecialDesbloqueado()) {
+                            attack.action(personagemBase.getHabilidadeSpecial());
+                            personagemBase.incrementarDanoCausado(personagemBase.getHabilidadeSpecial());
+                        } else {
+                            System.out.println("Ataque especial ainda não desbloqueado.");
+                        }
+                        break;
+                    case 0:
+                        System.out.println("Saindo...");
+                        return;
+                    default:
+                        System.out.println("Habilidade inválida");
+                }
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -86,12 +95,15 @@ public class Main {
     private static PersonagemBase escolherPersonagem() {
         System.out.println("Escolha seu personagem: ");
         System.out.println("1 - Arqueiro");
+        System.out.println("2 - Bruxa");
         int escolherPersonagem = scanner.nextInt();
         scanner.nextLine();
 
         switch (escolherPersonagem) {
             case 1:
                 return new Arqueiro();
+            case 2:
+                return new Bruxa();
             default:
                 return null;
         }
