@@ -4,17 +4,22 @@ import ConfigurationActions.ActionsInterface;
 import Personagem.PersonagemBase;
 
 import java.util.logging.Logger;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Attack implements ActionsInterface {
     private static final Logger LOGGER = Logger.getAnonymousLogger();
     private PersonagemBase personagemBase;
     private int ataquesPadraoRealizados;
     private boolean especialDesbloqueado;
+    private boolean especialEmExecucao;
 
     public Attack(PersonagemBase personagemBase) {
         this.personagemBase = personagemBase;
         this.ataquesPadraoRealizados = 0;
         this.especialDesbloqueado = false;
+        this.especialEmExecucao = false;
     }
 
     @Override
@@ -47,16 +52,54 @@ public class Attack implements ActionsInterface {
     private void attackSpecial(String habilidade) {
         habilidade = habilidade.toLowerCase();
         if (isSpecialSkill(habilidade)) {
-            Double dano = personagemBase.getDanoDeCadaHabilidade().get(habilidade);
-
-            if (dano != null) {
-                System.out.println("Ataque especial com " + habilidade + " causou " + dano + " de dano.");
+            if (habilidade.equals("veneno")) {
+                applyPoisonDamageOverTime(habilidade);
+                especialEmExecucao = true;
             } else {
-                System.out.println("Habilidade " + habilidade + " não encontrada.");
+                Double dano = personagemBase.getDanoDeCadaHabilidade().get(habilidade);
+                if (dano != null) {
+                    System.out.println("Ataque especial com " + habilidade + " causou " + dano + " de dano.");
+                } else {
+                    System.out.println("Habilidade " + habilidade + " não encontrada.");
+                }
             }
         } else {
             System.out.println("Habilidade " + habilidade + " não é o ataque especial.");
         }
+    }
+
+    private void applyPoisonDamageOverTime(String habilidade) {
+        Map<String, Double> habilidades = personagemBase.getDanoDeCadaHabilidade();
+        Double danoBase = habilidades.get(habilidade);
+        if (danoBase == null) {
+            System.out.println("Habilidade " + habilidade + " não encontrada.");
+            return;
+        }
+
+        Timer timer = new Timer();
+        TimerTask task = new TimerTask() {
+            int secondsPassed = 0;
+            double currentDamage = danoBase;
+
+            @Override
+            public void run() {
+                if (secondsPassed < 5) {
+                    System.out.println("Veneno causa " + currentDamage + " de dano.");
+                    currentDamage += 1;
+                    secondsPassed++;
+                } else {
+                    reiniciarAtaquePadrao();
+                    especialEmExecucao = false;
+                    timer.cancel();
+                }
+            }
+        };
+
+        timer.schedule(task, 0, 1000); // Executa a cada segundo durante 5 segundos
+    }
+
+    public boolean isEspecialEmExecucao(){
+        return especialEmExecucao;
     }
 
     public boolean isEspecialDesbloqueado(){
