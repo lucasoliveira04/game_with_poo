@@ -42,7 +42,10 @@ public class Main {
                 System.out.println("Turno do Player 1:");
                 attack1.setTurnoPlayer1(true);
                 escolherHabilidade(player1, attack1, attack2);
-                System.out.println("\nDano total causado pelo Player 1: " + player1.getDanoTotalCausado());
+                if (player1.isDefender()){
+                    System.out.println("\nDano total causado pelo Player 1: " + player1.getDanoTotalCausado());
+                }
+
                 if (player1.getDanoTotalCausado() >= PONTUACAO_ALVO) {
                     System.out.println("Player 1 venceu com " + player1.getDanoTotalCausado() + " de dano!");
                     jogoEmAndamento = false;

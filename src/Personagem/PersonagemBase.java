@@ -20,6 +20,7 @@ public class PersonagemBase {
     private double vida = 20;
     private Map<String, Double> danoDeCadaHabilidade = new HashMap<>();
     private double danoTotalCausado;
+    private boolean isDefender;
 
     // Construtor que inicializa danoDeCadaHabilidade com valores padrão
     public PersonagemBase(String nome, String habilidade1, String habilidade2, String habilidade3, String habilidadeSpecial) {
@@ -52,6 +53,9 @@ public class PersonagemBase {
 
     public void incrementarDanoCausado(String habilidade) {
         double dano = danoDeCadaHabilidade.getOrDefault(habilidade, 0.0);
+        if (isDefender) {
+            dano /= 2;
+        }
         danoTotalCausado += dano;
     }
 
@@ -68,12 +72,19 @@ public class PersonagemBase {
     }
 
     public void adicionarDanoCausado(double dano) {
+        if (isDefender) {
+            dano /= 2;
+        }
         this.danoTotalCausado += dano;
     }
 
     public void receberDano(double dano) {
+        if (isDefender) {
+            dano /= 2;
+        }
         this.vida -= dano;
         System.out.println(nome + " recebeu " + dano + " de dano. Vida restante: " + vida);
+        isDefender = false;
     }
 
     public String getNome() {
@@ -138,5 +149,13 @@ public class PersonagemBase {
 
     public void setHabilidadeSpecial(String habilidadeSpecial) {
         this.habilidadeSpecial = habilidadeSpecial;
+    }
+
+    public boolean isDefender() {
+        return isDefender;
+    }
+
+    public void setDefender(boolean defender) {
+        isDefender = defender;
     }
 }

@@ -3,7 +3,6 @@ package ConfigurationActions.Attack;
 import ConfigurationActions.ActionsInterface;
 import Personagem.PersonagemBase;
 
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +17,8 @@ public class Attack implements ActionsInterface {
     public Attack(PersonagemBase personagemBase) {
         this.personagemBase = personagemBase;
     }
+
+    public Attack() {}
 
     public void setTurnoPlayer1(boolean turnoPlayer1) {
         this.turnoPlayer1 = turnoPlayer1;
@@ -34,6 +35,11 @@ public class Attack implements ActionsInterface {
 
     @Override
     public void action(String optionSkill, Attack oponenteAttack) {
+        if (optionSkill.equalsIgnoreCase("defender")) {
+            defender();
+            return;
+        }
+
         if (especialDesbloqueado && isSpecialSkill(optionSkill)) {
             attackSpecial(optionSkill, oponenteAttack);
             reiniciarAtaquePadrao();
@@ -45,6 +51,7 @@ public class Attack implements ActionsInterface {
                 System.out.println("Você desbloqueou o ataque especial: " + personagemBase.getHabilidadeSpecial());
             }
         }
+
         // Após a ação, redefinimos a defesa
         this.defendendo = false;
     }
@@ -54,7 +61,7 @@ public class Attack implements ActionsInterface {
         Double dano = personagemBase.getDanoDeCadaHabilidade().get(habilidade);
 
         if (dano != null) {
-            if (oponenteAttack.defendendo) {
+            if (oponenteAttack.isDefendendo()) {
                 dano /= 2;
                 System.out.println("Dano reduzido pela metade devido à defesa do oponente.");
             }
@@ -74,7 +81,7 @@ public class Attack implements ActionsInterface {
         Double dano = personagemBase.getDanoDeCadaHabilidade().get(habilidade);
 
         if (dano != null) {
-            if (oponenteAttack.defendendo) {
+            if (oponenteAttack.isDefendendo()) {
                 dano /= 2;
                 System.out.println("Dano reduzido pela metade devido à defesa do oponente.");
             }
@@ -105,5 +112,13 @@ public class Attack implements ActionsInterface {
     private void reiniciarAtaquePadrao() {
         ataquesPadraoRealizados = 0;
         especialDesbloqueado = false;
+    }
+
+    public void setDefendendo(boolean defendendo) {
+        this.defendendo = defendendo;
+    }
+
+    public boolean isDefendendo() {
+        return defendendo;
     }
 }
