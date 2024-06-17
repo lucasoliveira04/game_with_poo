@@ -17,7 +17,7 @@ public class PersonagemBase {
     private String habilidade2;
     private String habilidade3;
     private String habilidadeSpecial;
-    private double vida = 100;
+    private double vida = 20;
     private Map<String, Double> danoDeCadaHabilidade = new HashMap<>();
     private double danoTotalCausado;
 
@@ -67,8 +67,13 @@ public class PersonagemBase {
         this.danoTotalCausado = danoTotalCausado;
     }
 
-    public void adicionarDanoCausado(double dano){
+    public void adicionarDanoCausado(double dano) {
         this.danoTotalCausado += dano;
+    }
+
+    public void receberDano(double dano) {
+        this.vida -= dano;
+        System.out.println(nome + " recebeu " + dano + " de dano. Vida restante: " + vida);
     }
 
     public String getNome() {
